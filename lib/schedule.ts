@@ -63,7 +63,7 @@ export class TicklessScheduler implements Scheduler {
   }
 
   private fire() {
-    const canceledIndexes: number[] = [];
+    const dropIndexes: number[] = [];
     for (let i = 0; i < this.schedules.length; ++i) {
       const now = getNow();
       const scheduled = this.schedules[i];
@@ -71,13 +71,17 @@ export class TicklessScheduler implements Scheduler {
         break;
       }
       if (scheduled.job.isCanceled()) {
-        canceledIndexes.unshift(i);
+        dropIndexes.unshift(i);
         continue;
       }
       scheduled.job.run();
+      if (scheduled.job.isOneshot()) {
+        dropIndexes.unshift(i);
+        continue;
+      }
       scheduled.at = scheduled.job.next(now);
     }
-    for (const idx of canceledIndexes) {
+    for (const idx of dropIndexes) {
       this.schedules.splice(idx, 1);
     }
     this.schedules = this.schedules.sort(compareSchedule);

@@ -3,7 +3,7 @@ import { Spec } from './spec';
 export abstract class Job {
   private canceled = false;
 
-  constructor(protected spec: Spec, protected handler: Function) {}
+  constructor(protected spec: Spec, protected handler: Function, private oneshot: boolean) {}
 
   cancel() {
     this.canceled = true;
@@ -11,6 +11,10 @@ export abstract class Job {
 
   isCanceled() {
     return this.canceled;
+  }
+
+  isOneshot() {
+    return this.oneshot;
   }
 
   next(now: number): number {
