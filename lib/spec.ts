@@ -5,17 +5,19 @@ export interface Spec {
 }
 
 export class IntervalSpec implements Spec {
+  static newSpecRegExp() {
+    return new RegExp(/^@every (?:(?<h>\d+)h)?(?:(?<m>\d+)m)?(?:(?<s>\d+)s)?(?:(?<ms>\d+)ms)?$/g);
+  }
+
   static match(spec: string) {
-    return spec.startsWith('@every');
+    return this.newSpecRegExp().test(spec);
   }
 
   private interval: number = 0;
 
   constructor(spec: string) {
     // h, m, s, ms
-    const match = /^@every (?:(?<h>\d+)h)?(?:(?<m>\d+)m)?(?:(?<s>\d+)s)?(?:(?<ms>\d+)ms)?$/g.exec(
-      spec
-    );
+    const match = IntervalSpec.newSpecRegExp().exec(spec);
     if (!match) {
       throw new Error(`Invalid interval: ${spec}`);
     }
