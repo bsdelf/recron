@@ -1,0 +1,12 @@
+.nyc_output
+.eslintrc
+.prettierrc
+tsconfig.tsbuildinfo
+tsconfig.json
+lib
+
+**/*.test.js
+**/*.test.js.map
+**/*.test.ts
+**/*.test.d.ts
+*.tgz

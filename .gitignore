@@ -1,0 +1,7 @@
+/.nyc_output
+/tsconfig.tsbuildinfo
+/dist
+/coverage
+
+*.tgz
+**/node_modules
