@@ -26,6 +26,7 @@ export abstract class Job {
 
 export class SerialJob extends Job {
   private running = false;
+
   async run() {
     if (this.running) {
       return;
