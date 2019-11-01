@@ -50,7 +50,7 @@ export class TicklessScheduler implements Scheduler {
   add(job: Job) {
     const at = job.next(getNow());
     this.schedules.push({ at, job });
-    this.schedules = this.schedules.sort(compareSchedule);
+    this.schedules.sort(compareSchedule);
     if (this.wakeupAt === undefined || at <= this.wakeupAt) {
       this.stop();
       this.start();
@@ -84,6 +84,6 @@ export class TicklessScheduler implements Scheduler {
     for (const idx of dropIndexes) {
       this.schedules.splice(idx, 1);
     }
-    this.schedules = this.schedules.sort(compareSchedule);
+    this.schedules.sort(compareSchedule);
   }
 }
