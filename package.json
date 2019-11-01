@@ -1,6 +1,6 @@
 {
   "name": "recron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple, intuitive and readable cron implementaiton",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
