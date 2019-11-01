@@ -73,3 +73,16 @@ But be careful, if the providered handler always underrun,
 due to a lot of unresolved promises,
 the memory consumption will keep increasing,
 and eventually you program will run OOM.
+
+## Crontab Alias
+
+`recron` support crontab alias as follows:
+
+| Alias    | Crontab       |
+| -------- | ------------- |
+| @hourly  | 0 \* \* \* \* |
+| @daily   | 0 0 \* \* \*  |
+| @weekly  | 0 0 \* \* 1   |
+| @monthly | 0 0 1 \* \*   |
+
+Note: we use Monday as the first day of the week according to international standard ISO 8601. So `@weekly` means "at 00:00 on Monday" instead of Sunday.
