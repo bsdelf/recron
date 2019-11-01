@@ -68,7 +68,7 @@ export class CrontabSpec implements Spec {
   }
 
   next(now: number): number {
-    this.expression.reset(now);
+    this.expression.reset(new Date(now));
     return this.expression.next().getTime();
   }
 }
