@@ -10,7 +10,7 @@ const createClock = () => {
   });
 };
 
-test('should throw when timeout is out of range', t => {
+test('OneshotTimer should throw when timeout is out of range', t => {
   t.throws(() => {
     new OneshotTimer(() => {}, 0);
   });
@@ -19,7 +19,7 @@ test('should throw when timeout is out of range', t => {
   });
 });
 
-test('should not throw when timeout valid', t => {
+test('OneshotTimer should not throw when timeout valid', t => {
   t.notThrows(() => {
     new OneshotTimer(() => {}, 1);
   });
@@ -28,7 +28,7 @@ test('should not throw when timeout valid', t => {
   });
 });
 
-test.cb('should trigger on timeout', t => {
+test.cb('OneshotTimer should trigger on timeout', t => {
   t.plan(2);
 
   const clock = createClock();
@@ -43,7 +43,7 @@ test.cb('should trigger on timeout', t => {
   clock.tick(timeout);
 });
 
-test.cb('should trigger on large timeout', t => {
+test.cb('OneshotTimer should trigger on large timeout', t => {
   t.plan(2);
 
   const clock = createClock();
@@ -58,7 +58,7 @@ test.cb('should trigger on large timeout', t => {
   clock.tick(timeout);
 });
 
-test('should trigger only once', t => {
+test('OneshotTimer should trigger only once', t => {
   t.plan(1);
 
   const clock = createClock();
@@ -72,7 +72,7 @@ test('should trigger only once', t => {
   clock.tick(timeout);
 });
 
-test('should be able to stop', t => {
+test('OneshotTimer should be able to stop', t => {
   t.plan(0);
 
   const clock = createClock();
