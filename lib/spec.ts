@@ -77,7 +77,7 @@ export class CrontabAliasSpec extends CrontabSpec {
   static aliasToSpec(alias: string) {
     const mapping = new Map([
       ['@monthly', '0 0 1 * *'],
-      ['@weekly', '0 0 * * 0'],
+      ['@weekly', '0 0 * * 1'],
       ['@daily', '0 0 * * *'],
       ['@hourly', '0 * * * *'],
     ]);
