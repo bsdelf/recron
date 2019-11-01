@@ -1,3 +1,4 @@
+// Max timeout allowed by setTimeout (not our timer).
 const MAX_TIMEOUT_ALLOWED = 2147483647;
 
 export class OneshotTimer {
