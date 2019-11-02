@@ -1,4 +1,4 @@
-import { TicklessScheduler } from './schedule';
+import { TicklessScheduler } from './scheduler';
 import { SerialJob, ConcurrentJob } from './job';
 import { Spec, IntervalSpec, CrontabSpec, CrontabAliasSpec } from './spec';
 
