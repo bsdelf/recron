@@ -3,7 +3,10 @@
 .prettierrc
 tsconfig.tsbuildinfo
 tsconfig.json
-lib
+tsconfig
+src
+test
+coverage
 
 **/*.test.js
 **/*.test.js.map

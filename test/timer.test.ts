@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import { OneshotTimer } from './timer';
+import { OneshotTimer } from '../src';
 
 const clockCreatedAt = 1483228800000;
 const createClock = () => {

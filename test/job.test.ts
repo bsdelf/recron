@@ -1,7 +1,6 @@
 import it from 'ava';
 import sinon from 'sinon';
-import { IntervalSpec } from './spec';
-import { SerialJob, ConcurrentJob } from './job';
+import { SerialJob, ConcurrentJob, IntervalSpec } from '../src';
 
 const createClock = () => {
   return sinon.useFakeTimers({

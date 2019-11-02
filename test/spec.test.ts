@@ -1,6 +1,6 @@
 import it from 'ava';
 import { combination } from 'js-combinatorics';
-import { IntervalSpec, CrontabSpec, CrontabAliasSpec } from './spec';
+import { IntervalSpec, CrontabSpec, CrontabAliasSpec } from '../src';
 
 const combToMs = (comb: string[]) => {
   const mapping: { [key: string]: number } = {

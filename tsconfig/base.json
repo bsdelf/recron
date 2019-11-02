@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "sourceMap": true,
+    "composite": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noEmitOnError": true,
+
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types"]
+  }
+}

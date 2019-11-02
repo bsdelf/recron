@@ -1,20 +1,11 @@
 {
+  "extends": "./tsconfig/base",
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
     "lib": ["dom", "es7", "es2017", "es2018"],
-    "composite": true,
-    "declaration": true,
-    "rootDir": "lib",
-    "outDir": "dist",
-    "strict": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "typeRoots": ["node_modules/@types"]
+    "rootDirs": ["src", "test"],
+    "outDir": "dist"
   },
-  "exclude": ["node_modules", "dist", "example"]
+  "exclude": ["node_modules", "dist"]
 }
