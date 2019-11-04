@@ -7,7 +7,9 @@
   "scripts": {
     "build": "tsc -p .",
     "clean": "tsc --build --clean",
-    "test": "nyc ava"
+    "test": "nyc ava",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "repository": {
     "type": "git",
@@ -34,7 +36,10 @@
     "@types/js-combinatorics": "^0.5.31",
     "@types/node": "^12.12.0",
     "@types/sinon": "^7.5.0",
+    "@typescript-eslint/eslint-plugin": "^2.6.0",
+    "@typescript-eslint/parser": "^2.6.0",
     "ava": "^2.4.0",
+    "eslint": "^6.6.0",
     "js-combinatorics": "^0.5.4",
     "nyc": "^14.1.1",
     "sinon": "^7.5.0",
@@ -51,7 +56,6 @@
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",
-    "all": true,
     "reporter": [
       "text",
       "lcov"
