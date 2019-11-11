@@ -8,9 +8,34 @@ export interface CronScheduleOptions {
   timezone?: string;
 }
 
+class TimezoneDetectionError extends Error {
+  constructor(reason: string) {
+    super(`Failed to detect timezone: ${reason}`);
+  }
+}
+
+const detectTimezone = () => {
+  if (typeof Intl !== 'object') {
+    throw new TimezoneDetectionError('Intl object not found');
+  }
+  if (typeof Intl.DateTimeFormat !== 'function') {
+    throw new TimezoneDetectionError('DateTimeFormat object not found');
+  }
+  const resolvedOptions = Intl.DateTimeFormat().resolvedOptions;
+  if (typeof resolvedOptions !== 'function') {
+    throw new TimezoneDetectionError('resolvedOptions method not found');
+  }
+  const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
+  if (!timeZone) {
+    throw new TimezoneDetectionError('timeZone property not found');
+  }
+  return timeZone;
+};
+
 export class Cron {
-  private timezone: string;
   private scheduler = new TicklessScheduler();
+
+  readonly timezone: string;
 
   /**
    * Constructor.
@@ -18,13 +43,7 @@ export class Cron {
    * @param timezone Default timezone for schedule.
    */
   constructor(timezone?: string) {
-    if (timezone) {
-      this.timezone = timezone;
-    } else if (typeof Intl === 'object') {
-      this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    } else {
-      this.timezone = 'UTC';
-    }
+    this.timezone = timezone || detectTimezone();
   }
 
   async start() {
