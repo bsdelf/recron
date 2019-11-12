@@ -42,6 +42,15 @@ cron.schedule(
 );
 ```
 
+## Timezone
+
+The constructor of `Cron` takes an optional parameter as its default timezone.
+If the timezone parameter unspecified, the default timezone will be detected from [`Intl.DateTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/resolvedOptions), it will be your local timezone in general.
+Mean while, the last parameter of `schedule()` method `options` has an optional `timezone` property,
+which can be used to override the default timezone.
+
+Note: timezone only affects cron syntax and its alias, interval syntax has nothing to do with timezone.
+
 ## Reentrant
 
 Unlike other cron implementations,
@@ -76,7 +85,7 @@ and eventually you program will run OOM.
 
 ## Crontab Alias
 
-`recron` support crontab alias as follows:
+`recron` has following crontab aliases:
 
 | Alias    | Crontab       |
 | -------- | ------------- |
@@ -85,4 +94,21 @@ and eventually you program will run OOM.
 | @weekly  | 0 0 \* \* 1   |
 | @monthly | 0 0 1 \* \*   |
 
-Note: we use Monday as the first day of the week according to international standard ISO 8601. So `@weekly` means "at 00:00 on Monday" instead of Sunday.
+Note: we use Monday as the first day of the week according to international standard ISO 8601. So `@weekly` means "at 00:00 on Monday", not Sunday.
+
+## Interval Syntax
+
+Interval syntax has following specifiers:
+
+| Order | Specifier | Unit        |
+| ----- | --------- | ----------- |
+| 1     | h         | hour        |
+| 2     | m         | minute      |
+| 3     | s         | second      |
+| 4     | ms        | Millisecond |
+
+One ore more specifiers can be used, as long as they are arranged in ascending order:
+
+- `@every 10s`
+- `@every 30m`
+- `@every 1h30m`
