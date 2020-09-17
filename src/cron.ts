@@ -54,7 +54,7 @@ export class Cron {
     this.scheduler.clear();
   }
 
-  schedule(spec: string, handler: Function, options?: CronScheduleOptions) {
+  schedule(spec: string, handler: () => unknown | Promise<unknown>, options?: CronScheduleOptions) {
     let timezone: string;
     let reentrant: boolean;
     let oneshot: boolean;

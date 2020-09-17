@@ -3,7 +3,11 @@ import { Spec } from './spec';
 export abstract class Job {
   private canceled = false;
 
-  constructor(protected spec: Spec, protected handler: Function, private oneshot: boolean) {}
+  constructor(
+    protected spec: Spec,
+    protected handler: () => unknown | Promise<unknown>,
+    private oneshot: boolean
+  ) {}
 
   cancel() {
     this.canceled = true;
@@ -34,7 +38,9 @@ export class SerialJob extends Job {
     this.running = true;
     try {
       await this.handler();
-    } catch {}
+    } catch {
+      // do nothing
+    }
     this.running = false;
   }
 }
@@ -43,6 +49,8 @@ export class ConcurrentJob extends Job {
   async run() {
     try {
       await this.handler();
-    } catch {}
+    } catch {
+      // to nothing
+    }
   }
 }

@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { permutation } from 'js-combinatorics';
 import { TicklessScheduler, ConcurrentJob, IntervalSpec } from '../src';
 
-const newJob = (interval: number, handler: Function, oneshot: boolean = false) => {
+const newJob = (interval: number, handler: () => void, oneshot = false) => {
   const spec = new IntervalSpec(`@every ${interval}s`);
   return new ConcurrentJob(spec, handler, oneshot);
 };
@@ -17,7 +17,7 @@ const createClock = () => {
 const oneSecond = 1000;
 
 const buildTicks = (duration: number, interval: number) => {
-  let ticks: number[] = [];
+  const ticks: number[] = [];
   const step = interval * oneSecond;
   for (let tick = step; tick <= duration; tick += step) {
     ticks.push(tick);
@@ -25,21 +25,21 @@ const buildTicks = (duration: number, interval: number) => {
   return ticks;
 };
 
-it('TicklessScheduler should be able to start', t => {
+it('TicklessScheduler should be able to start', (t) => {
   t.notThrows(() => {
     const scheduler = new TicklessScheduler();
     scheduler.start();
   });
 });
 
-it('TicklessScheduler should be able to stop', t => {
+it('TicklessScheduler should be able to stop', (t) => {
   t.notThrows(() => {
     const scheduler = new TicklessScheduler();
     scheduler.stop();
   });
 });
 
-it('TicklessScheduler should be able to start and stop', t => {
+it('TicklessScheduler should be able to start and stop', (t) => {
   t.notThrows(() => {
     const scheduler = new TicklessScheduler();
     scheduler.start();
@@ -56,7 +56,7 @@ it('TicklessScheduler should be able to start and stop', t => {
   }, {});
   const gen = permutation(['start', ...intervals]);
   for (let comb = gen.next(); comb; comb = gen.next()) {
-    it(`TicklessScheduler should work with time series: ${comb.join(',')}`, t => {
+    it(`TicklessScheduler should work with time series: ${comb.join(',')}`, (t) => {
       const clock = createClock();
       const actualTicks: TicksStore = {};
       const scheduler = new TicklessScheduler();
@@ -87,7 +87,7 @@ it('TicklessScheduler should be able to start and stop', t => {
   }
 })();
 
-it('TicklessScheduler should aware job cancel', t => {
+it('TicklessScheduler should aware job cancel', (t) => {
   const clock = createClock();
   t.plan(1);
   const scheduler = new TicklessScheduler();
@@ -100,7 +100,7 @@ it('TicklessScheduler should aware job cancel', t => {
   clock.tick(oneSecond);
 });
 
-it('TicklessScheduler should aware oneshot job', t => {
+it('TicklessScheduler should aware oneshot job', (t) => {
   const clock = createClock();
   t.plan(1);
   const scheduler = new TicklessScheduler();

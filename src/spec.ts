@@ -13,7 +13,7 @@ export class IntervalSpec implements Spec {
     return this.newSpecRegExp().test(spec);
   }
 
-  private interval: number = 0;
+  private interval = 0;
 
   constructor(spec: string) {
     // h, m, s, ms

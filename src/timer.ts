@@ -4,7 +4,7 @@ const MAX_TIMEOUT_ALLOWED = 2147483647;
 export class OneshotTimer {
   private timer?: NodeJS.Timer;
 
-  constructor(private callback: Function, private timeout: number) {
+  constructor(private callback: () => void, private timeout: number) {
     if (timeout < 1 || timeout > Number.MAX_SAFE_INTEGER) {
       throw new Error(`Timeout is out of range: [1, ${Number.MAX_SAFE_INTEGER}]`);
     }

@@ -10,13 +10,13 @@ const createClock = () => {
 
 const newSpec = () => new IntervalSpec('@every 1s');
 
-const sleep = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 const cases = [
   {
     ctor: SerialJob,
     supplement: () => {
-      it('SerialJob should run in sequential', async t => {
+      it('SerialJob should run in sequential', async (t) => {
         t.plan(1);
         const handler = async () => {
           await sleep(1000);
@@ -33,7 +33,7 @@ const cases = [
   {
     ctor: ConcurrentJob,
     supplement: () => {
-      it('ConcurrentJob should run in concurrent', async t => {
+      it('ConcurrentJob should run in concurrent', async (t) => {
         t.plan(2);
         const handler = async () => {
           await sleep(1000);
@@ -50,31 +50,61 @@ const cases = [
 ];
 
 for (const { ctor, supplement } of cases) {
-  it(`${ctor.name} should be able to run`, t => {
+  it(`${ctor.name} should be able to run`, (t) => {
     t.plan(1);
-    const handler = () => t.pass();
-    const job = new SerialJob(newSpec(), handler, false);
+    const job = new SerialJob(
+      newSpec(),
+      () => {
+        t.pass();
+      },
+      false
+    );
     job.cancel();
     job.run();
   });
 
-  it(`${ctor.name} should allow cancel`, t => {
-    const handler = () => {};
-    const job = new SerialJob(newSpec(), handler, false);
+  it(`${ctor.name} should allow cancel`, (t) => {
+    const job = new SerialJob(
+      newSpec(),
+      () => {
+        t.fail();
+      },
+      false
+    );
     job.cancel();
     t.true(job.isCanceled());
   });
 
-  it(`${ctor.name} should allow oneshot`, t => {
-    const handler = () => {};
-    t.true(new SerialJob(newSpec(), handler, true).isOneshot());
-    t.false(new SerialJob(newSpec(), handler, false).isOneshot());
+  it(`${ctor.name} should allow oneshot`, (t) => {
+    t.true(
+      new SerialJob(
+        newSpec(),
+        () => {
+          t.fail();
+        },
+        true
+      ).isOneshot()
+    );
+    t.false(
+      new SerialJob(
+        newSpec(),
+        () => {
+          t.fail();
+        },
+        false
+      ).isOneshot()
+    );
   });
 
-  it(`${ctor.name} should bypass next`, t => {
+  it(`${ctor.name} should bypass next`, (t) => {
     const spec = newSpec();
-    const handler = () => {};
-    const job = new SerialJob(spec, handler, false);
+    const job = new SerialJob(
+      spec,
+      () => {
+        t.fail();
+      },
+      false
+    );
     t.deepEqual(job.next(0), spec.next(0));
     t.deepEqual(job.next(1000000000000), spec.next(1000000000000));
   });

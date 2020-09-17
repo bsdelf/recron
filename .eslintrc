@@ -13,10 +13,7 @@
         "objectsInObjects": true
       }
     ],
-    "array-bracket-spacing": [
-      "error",
-      "never"
-    ],
+    "array-bracket-spacing": ["error", "never"],
     "comma-spacing": [
       "error",
       {
@@ -24,14 +21,12 @@
         "after": true
       }
     ],
-    "comma-style": [
-      "error",
-      "last"
-    ],
+    "comma-style": ["error", "last"],
     "no-multi-spaces": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "extends": [
     "eslint:recommended",
