@@ -25,7 +25,7 @@ export abstract class Job {
     return this.spec.next(now);
   }
 
-  abstract async run(): Promise<void>;
+  abstract run(): Promise<void>;
 }
 
 export class SerialJob extends Job {
