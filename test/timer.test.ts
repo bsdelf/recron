@@ -36,34 +36,46 @@ test('OneshotTimer should not throw when timeout valid', (t) => {
   });
 });
 
-test.cb('OneshotTimer should trigger on timeout', (t) => {
+test('OneshotTimer should trigger on timeout', async (t) => {
   t.plan(2);
 
   const clock = createClock();
   const timeout = 1000;
-  const handler = () => {
-    t.pass();
-    t.deepEqual(Date.now(), clockCreatedAt + timeout);
-    t.end();
-  };
-  const timer = new OneshotTimer(handler, timeout);
-  timer.start();
-  clock.tick(timeout);
+  await new Promise<void>((resolve, reject) => {
+    const handler = () => {
+      try {
+        t.pass();
+        t.deepEqual(Date.now(), clockCreatedAt + timeout);
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    };
+    const timer = new OneshotTimer(handler, timeout);
+    timer.start();
+    clock.tick(timeout);
+  });
 });
 
-test.cb('OneshotTimer should trigger on large timeout', (t) => {
+test('OneshotTimer should trigger on large timeout', async (t) => {
   t.plan(2);
 
   const clock = createClock();
   const timeout = 2147483647 * 2;
-  const handler = () => {
-    t.pass();
-    t.deepEqual(Date.now(), clockCreatedAt + timeout);
-    t.end();
-  };
-  const timer = new OneshotTimer(handler, timeout);
-  timer.start();
-  clock.tick(timeout);
+  await new Promise<void>((resolve, reject) => {
+    const handler = () => {
+      try {
+        t.pass();
+        t.deepEqual(Date.now(), clockCreatedAt + timeout);
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    };
+    const timer = new OneshotTimer(handler, timeout);
+    timer.start();
+    clock.tick(timeout);
+  });
 });
 
 test('OneshotTimer should trigger only once', (t) => {
