@@ -1,9 +1,9 @@
 {
   "extends": "./tsconfig/base",
   "compilerOptions": {
-    "target": "es6",
+    "lib": ["es2019"],
     "module": "commonjs",
-    "lib": ["dom", "es7", "es2017", "es2018"],
+    "target": "es2019",
     "rootDirs": ["src", "test"],
     "outDir": "dist"
   },
