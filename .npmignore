@@ -2,6 +2,7 @@
 .eslintrc
 .eslintignore
 .prettierrc
+.github
 tsconfig.tsbuildinfo
 tsconfig.json
 tsconfig
