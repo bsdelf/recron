@@ -1,5 +1,7 @@
 # Recron
 
+![CI status](https://github.com/bsdelf/recron/workflows/CI/badge.svg)
+
 Recron is a simple, intuitive and readable cron implementaiton written in TypeScript and suitable for Node.js and browser usage.
 
 ## Highlights
@@ -59,7 +61,7 @@ Therefore, if a handler take a lot of time to process, it will underrun.
 For example, given following piece of code:
 
 ```typescript
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 cron.schedule('@every 1s', async () => {
   console.log('overslept', new Date());
