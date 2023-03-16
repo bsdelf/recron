@@ -4,6 +4,18 @@ export interface Spec {
   next(now: number): number;
 }
 
+export class InvalidIntervalError extends Error {
+  constructor(spec: string) {
+    super(`Invalid interval: ${spec}`);
+  }
+}
+
+export class InvalidCrontabAliasError extends Error {
+  constructor(alias: string) {
+    super(`Invalid crontab alias: ${alias}`);
+  }
+}
+
 export class IntervalSpec implements Spec {
   static newSpecRegExp() {
     return new RegExp(/^@every (?:(?<h>\d+)h)?(?:(?<m>\d+)m)?(?:(?<s>\d+)s)?(?:(?<ms>\d+)ms)?$/g);
@@ -19,7 +31,7 @@ export class IntervalSpec implements Spec {
     // h, m, s, ms
     const match = IntervalSpec.newSpecRegExp().exec(spec);
     if (!match) {
-      throw new Error(`Invalid interval: ${spec}`);
+      throw new InvalidIntervalError(spec);
     }
     const mapping = {
       h: 60 * 60 * 1000,
@@ -91,7 +103,7 @@ export class CrontabAliasSpec extends CrontabSpec {
   constructor(alias: string, tz?: string) {
     const spec = CrontabAliasSpec.aliasToSpec(alias);
     if (!spec) {
-      throw new Error(`Invalid crontab alias: ${alias}`);
+      throw new InvalidCrontabAliasError(alias);
     }
     super(spec, tz);
   }

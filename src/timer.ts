@@ -1,12 +1,18 @@
 // Max timeout allowed by setTimeout (not our timer).
 const MAX_TIMEOUT_ALLOWED = 2147483647;
 
+export class TimeoutOutOfRangeError extends Error {
+  constructor() {
+    super(`Timeout is out of range: [1, ${Number.MAX_SAFE_INTEGER}]`);
+  }
+}
+
 export class OneshotTimer {
   private timer?: NodeJS.Timer;
 
   constructor(private callback: () => void, private timeout: number) {
     if (timeout < 1 || timeout > Number.MAX_SAFE_INTEGER) {
-      throw new Error(`Timeout is out of range: [1, ${Number.MAX_SAFE_INTEGER}]`);
+      throw new TimeoutOutOfRangeError();
     }
   }
 
