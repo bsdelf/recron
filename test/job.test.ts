@@ -1,22 +1,33 @@
 import it from 'ava';
-import sinon from 'sinon';
+import sinon, { SinonFakeTimers } from 'sinon';
 import { SerialJob, ConcurrentJob, IntervalSpec } from '../src';
 
+let timers: SinonFakeTimers[] = [];
+
 const createClock = () => {
-  return sinon.useFakeTimers({
+  const timer = sinon.useFakeTimers({
     toFake: ['setTimeout', 'Date'],
   });
+  timers.push(timer);
+  return timer;
 };
 
 const newSpec = () => new IntervalSpec('@every 1s');
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
+it.afterEach(() => {
+  for (const timer of timers) {
+    timer.restore();
+  }
+  timers = [];
+});
+
 const cases = [
   {
     ctor: SerialJob,
     supplement: () => {
-      it('SerialJob should run in sequential', async (t) => {
+      it.serial('SerialJob should run in sequential', async (t) => {
         t.plan(1);
         const handler = async () => {
           await sleep(1000);
@@ -33,7 +44,7 @@ const cases = [
   {
     ctor: ConcurrentJob,
     supplement: () => {
-      it('ConcurrentJob should run in concurrent', async (t) => {
+      it.serial('ConcurrentJob should run in concurrent', async (t) => {
         t.plan(2);
         const handler = async () => {
           await sleep(1000);
@@ -50,7 +61,7 @@ const cases = [
 ];
 
 for (const { ctor, supplement } of cases) {
-  it(`${ctor.name} should be able to run`, (t) => {
+  it.serial(`${ctor.name} should be able to run`, (t) => {
     t.plan(1);
     const job = new SerialJob(
       newSpec(),
@@ -63,7 +74,7 @@ for (const { ctor, supplement } of cases) {
     job.run();
   });
 
-  it(`${ctor.name} should allow cancel`, (t) => {
+  it.serial(`${ctor.name} should allow cancel`, (t) => {
     const job = new SerialJob(
       newSpec(),
       () => {
@@ -75,7 +86,7 @@ for (const { ctor, supplement } of cases) {
     t.true(job.isCanceled());
   });
 
-  it(`${ctor.name} should allow oneshot`, (t) => {
+  it.serial(`${ctor.name} should allow oneshot`, (t) => {
     t.true(
       new SerialJob(
         newSpec(),
@@ -96,7 +107,7 @@ for (const { ctor, supplement } of cases) {
     );
   });
 
-  it(`${ctor.name} should bypass next`, (t) => {
+  it.serial(`${ctor.name} should bypass next`, (t) => {
     const spec = newSpec();
     const job = new SerialJob(
       spec,

@@ -14,9 +14,6 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-
-    "types": ["node"],
-    "typeRoots": ["node_modules/@types"]
+    "noUnusedParameters": true
   }
 }
