@@ -8,7 +8,7 @@ export class TimeoutOutOfRangeError extends Error {
 }
 
 export class OneshotTimer {
-  private timer?: NodeJS.Timer;
+  private timer?: NodeJS.Timeout;
 
   constructor(private callback: () => void, private timeout: number) {
     if (timeout < 1 || timeout > Number.MAX_SAFE_INTEGER) {

@@ -1,11 +1,13 @@
 {
-  "extends": "./tsconfig/base",
+  "extends": ["./tsconfig/base"],
   "compilerOptions": {
-    "lib": ["es2019"],
     "module": "commonjs",
-    "target": "es2019",
+    "lib": ["ES2022"],
+    "target": "ES2022",
     "rootDirs": ["src", "test"],
-    "outDir": "dist"
+    "outDir": "dist",
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types"],
   },
   "exclude": ["node_modules", "dist"]
 }

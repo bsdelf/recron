@@ -1,5 +1,5 @@
 import it from 'ava';
-import sinon from 'sinon';
+import sinon, { SinonFakeTimers } from 'sinon';
 import { permutation } from 'js-combinatorics';
 import { TicklessScheduler, ConcurrentJob, IntervalSpec } from '../src';
 
@@ -8,11 +8,22 @@ const newJob = (interval: number, handler: () => void, oneshot = false) => {
   return new ConcurrentJob(spec, handler, oneshot);
 };
 
+let timers: SinonFakeTimers[] = [];
+
 const createClock = () => {
-  return sinon.useFakeTimers({
+  const timer = sinon.useFakeTimers({
     toFake: ['setTimeout', 'clearTimeout', 'Date'],
   });
+  timers.push(timer);
+  return timer;
 };
+
+it.afterEach(() => {
+  for (const timer of timers) {
+    timer.restore();
+  }
+  timers = [];
+});
 
 const oneSecond = 1000;
 
@@ -25,21 +36,21 @@ const buildTicks = (duration: number, interval: number) => {
   return ticks;
 };
 
-it('TicklessScheduler should be able to start', (t) => {
+it.serial('TicklessScheduler should be able to start', (t) => {
   t.notThrows(() => {
     const scheduler = new TicklessScheduler();
     scheduler.start();
   });
 });
 
-it('TicklessScheduler should be able to stop', (t) => {
+it.serial('TicklessScheduler should be able to stop', (t) => {
   t.notThrows(() => {
     const scheduler = new TicklessScheduler();
     scheduler.stop();
   });
 });
 
-it('TicklessScheduler should be able to start and stop', (t) => {
+it.serial('TicklessScheduler should be able to start and stop', (t) => {
   t.notThrows(() => {
     const scheduler = new TicklessScheduler();
     scheduler.start();
@@ -56,7 +67,7 @@ it('TicklessScheduler should be able to start and stop', (t) => {
   }, {});
   const gen = permutation(['start', ...intervals]);
   for (let comb = gen.next(); comb; comb = gen.next()) {
-    it(`TicklessScheduler should work with time series: ${comb.join(',')}`, (t) => {
+    it.serial(`TicklessScheduler should work with time series: ${comb.join(',')}`, (t) => {
       const clock = createClock();
       const actualTicks: TicksStore = {};
       const scheduler = new TicklessScheduler();
@@ -87,7 +98,7 @@ it('TicklessScheduler should be able to start and stop', (t) => {
   }
 })();
 
-it('TicklessScheduler should aware job cancel', (t) => {
+it.serial('TicklessScheduler should aware job cancel', (t) => {
   const clock = createClock();
   t.plan(1);
   const scheduler = new TicklessScheduler();
@@ -100,7 +111,7 @@ it('TicklessScheduler should aware job cancel', (t) => {
   clock.tick(oneSecond);
 });
 
-it('TicklessScheduler should aware oneshot job', (t) => {
+it.serial('TicklessScheduler should aware oneshot job', (t) => {
   const clock = createClock();
   t.plan(1);
   const scheduler = new TicklessScheduler();
