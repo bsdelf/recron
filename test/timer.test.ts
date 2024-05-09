@@ -1,16 +1,28 @@
 import test from 'ava';
-import sinon from 'sinon';
+import sinon, { SinonFakeTimers } from 'sinon';
 import { OneshotTimer } from '../src';
 
 const clockCreatedAt = 1483228800000;
+
+let timers: SinonFakeTimers[] = [];
+
 const createClock = () => {
-  return sinon.useFakeTimers({
+  const timer = sinon.useFakeTimers({
     now: clockCreatedAt,
     toFake: ['setTimeout', 'clearTimeout', 'Date'],
   });
+  timers.push(timer);
+  return timer;
 };
 
-test('OneshotTimer should throw when timeout is out of range', (t) => {
+test.afterEach(() => {
+  for (const timer of timers) {
+    timer.restore();
+  }
+  timers = [];
+});
+
+test.serial('OneshotTimer should throw when timeout is out of range', (t) => {
   t.throws(() => {
     new OneshotTimer(() => {
       t.fail('should not hit');
@@ -23,7 +35,7 @@ test('OneshotTimer should throw when timeout is out of range', (t) => {
   });
 });
 
-test('OneshotTimer should not throw when timeout valid', (t) => {
+test.serial('OneshotTimer should not throw when timeout valid', (t) => {
   t.notThrows(() => {
     new OneshotTimer(() => {
       t.fail('should not hit');
@@ -36,7 +48,7 @@ test('OneshotTimer should not throw when timeout valid', (t) => {
   });
 });
 
-test('OneshotTimer should trigger on timeout', async (t) => {
+test.serial('OneshotTimer should trigger on timeout', async (t) => {
   t.plan(2);
 
   const clock = createClock();
@@ -57,7 +69,7 @@ test('OneshotTimer should trigger on timeout', async (t) => {
   });
 });
 
-test('OneshotTimer should trigger on large timeout', async (t) => {
+test.serial('OneshotTimer should trigger on large timeout', async (t) => {
   t.plan(2);
 
   const clock = createClock();
@@ -78,7 +90,7 @@ test('OneshotTimer should trigger on large timeout', async (t) => {
   });
 });
 
-test('OneshotTimer should trigger only once', (t) => {
+test.serial('OneshotTimer should trigger only once', (t) => {
   t.plan(1);
 
   const clock = createClock();
@@ -92,7 +104,7 @@ test('OneshotTimer should trigger only once', (t) => {
   clock.tick(timeout);
 });
 
-test('OneshotTimer should be able to stop', (t) => {
+test.serial('OneshotTimer should be able to stop', (t) => {
   t.plan(0);
 
   const clock = createClock();
