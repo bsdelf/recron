@@ -63,7 +63,7 @@ export class CrontabSpec implements Spec {
     return n === 5 || n === 6;
   }
 
-  private expression: any;
+  private expression: CronParser.CronExpression<false>;
 
   constructor(spec: string, tz?: string) {
     let options;
