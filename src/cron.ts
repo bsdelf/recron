@@ -1,6 +1,7 @@
 import { TicklessScheduler } from './scheduler';
 import { SerialJob, ConcurrentJob } from './job';
 import { Spec, IntervalSpec, CrontabSpec, CrontabAliasSpec } from './spec';
+import { detectTimeZone } from './utils';
 
 export interface CronScheduleOptions {
   oneshot?: boolean;
@@ -8,29 +9,11 @@ export interface CronScheduleOptions {
   timezone?: string;
 }
 
-class TimezoneDetectionError extends Error {
-  constructor(reason: string) {
-    super(`Failed to detect timezone: ${reason}`);
+export class UnsupportedSpecError extends Error {
+  constructor(spec: string) {
+    super(`Unsupported spec: ${spec}`);
   }
 }
-
-const detectTimezone = () => {
-  if (typeof Intl !== 'object') {
-    throw new TimezoneDetectionError('Intl object not found');
-  }
-  if (typeof Intl.DateTimeFormat !== 'function') {
-    throw new TimezoneDetectionError('DateTimeFormat object not found');
-  }
-  const resolvedOptions = Intl.DateTimeFormat().resolvedOptions;
-  if (typeof resolvedOptions !== 'function') {
-    throw new TimezoneDetectionError('resolvedOptions method not found');
-  }
-  const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
-  if (!timeZone) {
-    throw new TimezoneDetectionError('timeZone property not found');
-  }
-  return timeZone;
-};
 
 export class Cron {
   private scheduler = new TicklessScheduler();
@@ -43,7 +26,7 @@ export class Cron {
    * @param timezone Default timezone for schedule.
    */
   constructor(timezone?: string) {
-    this.timezone = timezone || detectTimezone();
+    this.timezone = timezone || detectTimeZone();
   }
 
   async start() {
@@ -76,7 +59,7 @@ export class Cron {
       }
     }
     if (!specObject) {
-      throw new Error(`Unsupported spec: ${spec}`);
+      throw new UnsupportedSpecError(spec);
     }
     const JobConstructor = reentrant ? ConcurrentJob : SerialJob;
     const job = new JobConstructor(specObject, handler, oneshot);
