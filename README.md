@@ -9,7 +9,7 @@ Recron is a simple, intuitive and readable cron implementaiton written in TypeSc
 - Object oriented design.
 - Support update schedule on the fly.
 - Support both crontab and interval syntax.
-- Support multi-timezone in a single cron object.
+- Support different time zones in a single cron instance.
 - Tickless scheduler (will be optional in feature).
 - Compact and quite readable code base written in TypeScript.
 
@@ -44,20 +44,21 @@ cron.schedule(
 );
 ```
 
-## Timezone
+## Time zone
 
-The constructor of `Cron` takes an optional parameter as its default timezone.
-If the timezone parameter unspecified, the default timezone will be detected from [`Intl.DateTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/resolvedOptions), it will be your local timezone in general.
-Mean while, the last parameter of `schedule()` method `options` has an optional `timezone` property,
-which can be used to override the default timezone.
+The constructor of `Cron` has an optional parameter to let you set time zone.
+If the `timezone` parameter is unspecified, the default time zone will be detected from [`Intl.DateTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/resolvedOptions), it will be your local time zone in general.
 
-Note: timezone only affects cron syntax and its alias, interval syntax has nothing to do with timezone.
+Also, the last parameter of `schedule()` method `options` has an optional `timezone` property,
+which can be used to override the default time zone for individual schedule.
+
+Note: time zone only affects crontab, it does not affect the interval usage.
 
 ## Reentrant
 
 Unlike other cron implementations,
-reentrant is not allowd in `recron` by default for both safe and convenient.
-Therefore, if a handler take a lot of time to process, it will underrun.
+reentrant is not allowd in `recron` by default for both safety and convenient.
+Therefore, if the scheduled callback function takes a lot of time to process, it will underrun.
 For example, given following piece of code:
 
 ```typescript
@@ -80,10 +81,10 @@ overslept 2019-10-31T05:05:40.275Z
 ```
 
 To disable this feature, set `reentrant` to `true` in options.
-But be careful, if the providered handler always underrun,
-due to a lot of unresolved promises,
-the memory consumption will keep increasing,
-and eventually you program will run OOM.
+But be careful, if the providered callback function keeps underrun,
+due to the unresolved promises,
+the memory consumption will be increasing,
+and eventually you program will run out-of-memory.
 
 ## Crontab Alias
 
@@ -96,7 +97,7 @@ and eventually you program will run OOM.
 | @weekly  | 0 0 \* \* 1   |
 | @monthly | 0 0 1 \* \*   |
 
-Note: we use Monday as the first day of the week according to international standard ISO 8601. So `@weekly` means "at 00:00 on Monday", not Sunday.
+Note: we regard Monday as the first day of the week according to international standard ISO 8601. So `@weekly` means "at 00:00 on Monday", not Sunday.
 
 ## Interval Syntax
 

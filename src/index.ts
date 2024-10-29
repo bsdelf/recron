@@ -3,3 +3,4 @@ export * from './spec';
 export * from './job';
 export * from './timer';
 export * from './scheduler';
+export * from './utils';
