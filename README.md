@@ -10,7 +10,7 @@ Recron is a simple, intuitive and readable cron implementaiton written in TypeSc
 - Support update schedule on the fly.
 - Support both crontab and interval syntax.
 - Support different time zones in a single cron instance.
-- Tickless scheduler (will be optional in feature).
+- Tickless scheduler (will be optional in future).
 - Compact and quite readable code base written in TypeScript.
 
 ## Usage
